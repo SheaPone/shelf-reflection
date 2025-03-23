@@ -1,3 +1,12 @@
+export type Review = {
+  reviewId?: number;
+  bookTitle: string;
+  author: string;
+  photoUrl: string;
+  rating: number;
+  review: string;
+};
+
 import { User } from '../components/UserContext';
 
 const authKey = 'um.auth';
@@ -26,4 +35,31 @@ export function readToken(): string | undefined {
   const auth = localStorage.getItem(authKey);
   if (!auth) return undefined;
   return (JSON.parse(auth) as Auth).token;
+}
+
+export async function readReviews(): Promise<Review[]> {
+  const token = readToken();
+  const req = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const res = await fetch('/api/reviews', req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Review[];
+}
+
+export async function addReview(newReview: Review): Promise<Review> {
+  const token = readToken();
+  const req = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(newReview),
+  };
+  const res = await fetch('/api/reviews', req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Review;
 }

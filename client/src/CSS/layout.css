@@ -83,8 +83,17 @@
   left: 0;
 }
 
+.pink-background {
+  color: pink;
+}
+
 .white-text {
   color: white;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
 .black-text {
