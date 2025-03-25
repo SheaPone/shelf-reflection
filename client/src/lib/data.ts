@@ -49,7 +49,7 @@ export async function readReviews(): Promise<Review[]> {
   return (await res.json()) as Review[];
 }
 
-export async function addReview(newReview: Review): Promise<Review> {
+export async function addReview(review: Review): Promise<Review> {
   const token = readToken();
   const req = {
     method: 'POST',
@@ -57,7 +57,7 @@ export async function addReview(newReview: Review): Promise<Review> {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(newReview),
+    body: JSON.stringify(review),
   };
   const res = await fetch('/api/reviews', req);
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);

@@ -1,10 +1,10 @@
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { type Review, addReview } from '../lib/data';
+import { addReview, type Review } from '../lib/data';
 
 export function ReviewForm() {
   const [photoUrl, setPhotoUrl] = useState<string>();
-  const [review, setReview] = useState<Review>();
+  // const [review, setReview] = useState<Review>();
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();
 
@@ -12,8 +12,18 @@ export function ReviewForm() {
     event.preventDefault();
     try {
       const formData = new FormData(event.currentTarget);
-      const newReview = Object.fromEntries(formData) as unknown as Review;
-      setReview(newReview);
+      const bookTitle = formData.get('bookTitle') as string;
+      const author = formData.get('author') as string;
+      const photoUrl = formData.get('photoUrl') as string;
+      const review = formData.get('review') as string;
+      const newReview: Review = {
+        bookTitle,
+        author,
+        photoUrl,
+        rating,
+        review,
+      };
+      console.log('new review:', newReview);
       addReview(newReview);
       navigate('/');
     } catch (err) {
@@ -42,7 +52,7 @@ export function ReviewForm() {
               Book Title
               <input
                 name="bookTitle"
-                defaultValue={review?.bookTitle ?? ''}
+                // defaultValue={review?.bookTitle ?? ''}
                 required
                 className="input-b-color text-padding input-b-radius purple-outline input-height margin-bottom-2 d-block width-100"
                 type="text"
@@ -52,7 +62,7 @@ export function ReviewForm() {
               Author
               <input
                 name="author"
-                defaultValue={review?.author ?? ''}
+                // defaultValue={review?.author ?? ''}
                 required
                 className="input-b-color text-padding input-b-radius purple-outline input-height margin-bottom-2 d-block width-100"
                 type="text"
@@ -62,7 +72,7 @@ export function ReviewForm() {
               Photo URL
               <input
                 name="photoUrl"
-                defaultValue={review?.photoUrl ?? ''}
+                // defaultValue={review?.photoUrl ?? ''}
                 required
                 className="input-b-color text-padding input-b-radius purple-outline input-height margin-bottom-2 d-block width-100"
                 type="text"
@@ -78,7 +88,7 @@ export function ReviewForm() {
                     <i
                       key={index}
                       id={`star-${index}`}
-                      defaultValue={review?.rating ?? ''}
+                      // defaultValue={review?.rating ?? ''}
                       className={
                         index <= rating
                           ? 'fa-solid fa-star star filled'
@@ -98,7 +108,7 @@ export function ReviewForm() {
               Review
               <textarea
                 name="review"
-                defaultValue={review?.review ?? ''}
+                // defaultValue={review?.review ?? ''}
                 required
                 className="input-b-color text-padding input-b-radius purple-outline d-block width-100"
                 cols={30}
