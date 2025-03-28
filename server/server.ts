@@ -4,7 +4,16 @@ import express from 'express';
 import pg from 'pg';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-import { ClientError, errorMiddleware } from './lib/index.js';
+import { authMiddleware, ClientError, errorMiddleware } from './lib/index.js';
+
+type Review = {
+  reviewId?: number;
+  bookTitle: string;
+  author: string;
+  photoUrl: string;
+  rating: number;
+  review: string;
+};
 
 type Auth = {
   username: string;
@@ -82,6 +91,54 @@ where "username" = $1;
   }
 });
 
+app.get('/api/reviews', authMiddleware, async (req, res, next) => {
+  try {
+    const sql = `
+  select * from "reviews"
+  where "userId" = $1
+  order by "reviewId" desc;
+  `;
+    const params = [req.user?.userId];
+    const result = await db.query(sql, params);
+    const total = result.rows;
+    if (!total) {
+      throw new ClientError(404, `reviews not found`);
+    }
+    res.json(total);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/reviews', authMiddleware, async (req, res, next) => {
+  try {
+    const { bookTitle, author, photoUrl, rating, review } = req.body;
+    if (!bookTitle || !author || !photoUrl || !rating || !review) {
+      throw new ClientError(
+        400,
+        `bookTitle, author, photoUrl, rating, and review are required`
+      );
+    }
+    const sql = `
+  insert into "reviews" ("bookTitle", "author", "photoUrl", "rating", "review", "userId")
+  values ($1, $2, $3, $4, $5, $6)
+  returning *;
+  `;
+    const params = [
+      bookTitle,
+      author,
+      photoUrl,
+      rating,
+      review,
+      req.user?.userId,
+    ];
+    const result = await db.query(sql, params);
+    const newReview = result.rows[0];
+    res.status(201).json(newReview);
+  } catch (err) {
+    next(err);
+  }
+});
 // // Create paths for static directories
 // const reactStaticDir = new URL('../client/dist', import.meta.url).pathname;
 // const uploadsStaticDir = new URL('public', import.meta.url).pathname;
