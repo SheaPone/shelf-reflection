@@ -3,7 +3,7 @@
 }
 
 .form-image {
-  max-height: 12rem;
+  max-height: 15rem;
   margin-bottom: 1rem;
   aspect-ratio: auto;
   margin-left: auto;
@@ -15,8 +15,12 @@
   height: 2.5rem;
 }
 
+.float-right {
+  float: right;
+}
+
 .margin-top {
-  margin-top: 4rem;
+  margin-top: 6rem;
 }
 
 .pink-background {
@@ -39,9 +43,21 @@
   border: 1px solid #b6b6b6;
 }
 
-.entry-ul {
+.review-ul {
   list-style: none;
   padding: 0;
+}
+
+.float-left {
+  float: left;
+}
+
+.margin-left {
+  margin-left: 0.3rem;
+}
+
+.margin-bottom-one {
+  margin-bottom: 1rem;
 }
 
 .navbar-link {
@@ -59,7 +75,7 @@
 .form-link {
   text-decoration: none;
   outline: none;
-  background-color: #562b81;
+  background-color: pink;
   padding: 0.5rem 1rem;
   border-radius: 5px;
 }
