@@ -49,6 +49,20 @@ export async function readReviews(): Promise<Review[]> {
   return (await res.json()) as Review[];
 }
 
+export async function readReview(
+  reviewId: number
+): Promise<Review | undefined> {
+  const token = readToken();
+  const req = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const res = await fetch(`/api/reviews/${reviewId}`, req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Review;
+}
+
 export async function addReview(review: Review): Promise<Review> {
   const token = readToken();
   const req = {
@@ -60,6 +74,21 @@ export async function addReview(review: Review): Promise<Review> {
     body: JSON.stringify(review),
   };
   const res = await fetch('/api/reviews', req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Review;
+}
+
+export async function updateReview(review: Review): Promise<Review> {
+  const token = readToken();
+  const req = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(review),
+  };
+  const res = await fetch(`/api/reviews/${review.reviewId}`, req);
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);
   return (await res.json()) as Review;
 }

@@ -48,6 +48,10 @@
   padding: 0;
 }
 
+.pink {
+  color: pink;
+}
+
 .float-left {
   float: left;
 }

@@ -1,12 +1,34 @@
-import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { addReview, type Review } from '../lib/data';
+import { FormEvent, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { addReview, readReview, updateReview, type Review } from '../lib/data';
 
 export function ReviewForm() {
+  const { reviewId } = useParams();
   const [photoUrl, setPhotoUrl] = useState<string>();
-  // const [review, setReview] = useState<Review>();
+  const isEditing = reviewId && reviewId !== 'new';
+  const [error, setError] = useState<unknown>();
+  const [reviews, setReviews] = useState<Review>();
+  const [isLoading, setIsLoading] = useState(false);
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function load(id: number) {
+      setIsLoading(true);
+      try {
+        const review = await readReview(id);
+        if (!review) throw new Error(`Review with ID ${id} not found`);
+        setReviews(review);
+        setPhotoUrl(review.photoUrl);
+        setRating(review.rating);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    if (isEditing) load(+reviewId);
+  }, [reviewId, isEditing]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -23,19 +45,33 @@ export function ReviewForm() {
         rating,
         review,
       };
-      console.log('new review:', newReview);
-      addReview(newReview);
+      if (isEditing) {
+        updateReview({ ...reviews, ...newReview });
+      } else {
+        addReview(newReview);
+      }
       navigate('/');
     } catch (err) {
       console.error(err);
       alert(`Error adding review: ` + String(err));
     }
   }
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) {
+    return (
+      <div>
+        Error Loading Review with ID {reviewId}:{' '}
+        {error instanceof Error ? error.message : 'Unknown Error'}
+      </div>
+    );
+  }
+
   return (
     <div className="container">
       <div className="row">
         <div className="column-half d-flex justify-between margin-top">
-          <h2>New Review</h2>
+          <h2>{isEditing ? 'Edit Review' : 'New Review'}</h2>
         </div>
       </div>
       <form onSubmit={handleSubmit}>
@@ -52,7 +88,7 @@ export function ReviewForm() {
               Book Title
               <input
                 name="bookTitle"
-                // defaultValue={review?.bookTitle ?? ''}
+                defaultValue={reviews?.bookTitle ?? ''}
                 required
                 className="input-b-color text-padding input-b-radius purple-outline input-height margin-bottom-2 d-block width-100"
                 type="text"
@@ -62,7 +98,7 @@ export function ReviewForm() {
               Author
               <input
                 name="author"
-                // defaultValue={review?.author ?? ''}
+                defaultValue={reviews?.author ?? ''}
                 required
                 className="input-b-color text-padding input-b-radius purple-outline input-height margin-bottom-2 d-block width-100"
                 type="text"
@@ -72,7 +108,7 @@ export function ReviewForm() {
               Photo URL
               <input
                 name="photoUrl"
-                // defaultValue={review?.photoUrl ?? ''}
+                defaultValue={reviews?.photoUrl ?? ''}
                 required
                 className="input-b-color text-padding input-b-radius purple-outline input-height margin-bottom-2 d-block width-100"
                 type="text"
@@ -88,7 +124,7 @@ export function ReviewForm() {
                     <i
                       key={index}
                       id={`star-${index}`}
-                      // defaultValue={review?.rating ?? ''}
+                      defaultValue={reviews?.rating ?? ''}
                       className={
                         index <= rating
                           ? 'fa-solid fa-star star filled'
@@ -108,7 +144,7 @@ export function ReviewForm() {
               Review
               <textarea
                 name="review"
-                // defaultValue={review?.review ?? ''}
+                defaultValue={reviews?.review ?? ''}
                 required
                 className="input-b-color text-padding input-b-radius purple-outline d-block width-100"
                 cols={30}
