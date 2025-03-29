@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { readReviews, Review } from '../lib/data';
+import { FaPencilAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useUser } from '../components/useUser';
 import { useEffect } from 'react';
@@ -75,14 +76,17 @@ function ReviewCard({ review }: ReviewProps) {
         </div>
         <div className="column-half">
           <div className="row">
-            <div className="column-full d-flex justify-between margin-top">
+            <div className="column-full d-flex justify-between margin-top black-text">
               <h3>{review.bookTitle}</h3>
+              <Link className="float-right" to={`details/${review.reviewId}`}>
+                <FaPencilAlt />
+              </Link>
             </div>
-            <div className="column-full d-flex justify-between">
+            <div className="column-full d-flex justify-between black-text">
               <h3>{review.author}</h3>
             </div>
           </div>
-          <div className="float-left margin-left">
+          <div className="float-left margin-left pink">
             {[...Array(5)].map((_, index) => {
               index += 1;
               return (
@@ -98,7 +102,7 @@ function ReviewCard({ review }: ReviewProps) {
               );
             })}
           </div>
-          <div className="column-full d-flex justify-between">
+          <div className="column-full d-flex justify-between black-text">
             <p>{review.review}</p>
           </div>
         </div>

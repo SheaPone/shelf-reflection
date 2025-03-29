@@ -110,6 +110,28 @@ app.get('/api/reviews', authMiddleware, async (req, res, next) => {
   }
 });
 
+app.get('/api/reviews/:reviewId', authMiddleware, async (req, res, next) => {
+  try {
+    const { reviewId } = req.params;
+    if (reviewId === undefined) {
+      throw new ClientError(400, `reviewId required`);
+    }
+    const sql = `
+    select * from "reviews"
+    where "reviewId" = $1 and "userId" =$2;
+    `;
+    const params = [reviewId, req.user?.userId];
+    const result = await db.query<Review>(sql, params);
+    const review = result.rows[0];
+    if (!review) {
+      throw new ClientError(404, `review ${reviewId} not found`);
+    }
+    res.json(review);
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.post('/api/reviews', authMiddleware, async (req, res, next) => {
   try {
     const { bookTitle, author, photoUrl, rating, review } = req.body;
@@ -135,6 +157,44 @@ app.post('/api/reviews', authMiddleware, async (req, res, next) => {
     const result = await db.query(sql, params);
     const newReview = result.rows[0];
     res.status(201).json(newReview);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.put('/api/reviews/:reviewId', authMiddleware, async (req, res, next) => {
+  try {
+    const reviewId = Number(req.params.reviewId);
+    if (!Number.isInteger(reviewId) || reviewId < 1) {
+      throw new ClientError(400, 'reviewId must be a positive integer');
+    }
+    const { bookTitle, author, photoUrl, rating, review } = req.body;
+    const sql = `
+    update "reviews"
+      set "updatedAt" = now(),
+          "bookTitle" = $1,
+          "author" = $2,
+          "photoUrl" = $3,
+          "rating" = $4,
+          "review" = $5
+    where "reviewId" = $6 and "userId" = $7
+    returning *;
+    `;
+    const params = [
+      bookTitle,
+      author,
+      photoUrl,
+      rating,
+      review,
+      reviewId,
+      req.user?.userId,
+    ];
+    const result = await db.query(sql, params);
+    const updatedReview = result.rows[0];
+    if (!updatedReview) {
+      throw new ClientError(400, `cannot find review of review Id ${reviewId}`);
+    }
+    res.json(updatedReview);
   } catch (err) {
     next(err);
   }
