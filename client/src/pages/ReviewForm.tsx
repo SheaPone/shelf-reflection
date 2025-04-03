@@ -1,6 +1,12 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addReview, readReview, updateReview, type Review } from '../lib/data';
+import {
+  addReview,
+  readReview,
+  removeReview,
+  updateReview,
+  type Review,
+} from '../lib/data';
 
 export function ReviewForm() {
   const { reviewId } = useParams();
@@ -9,6 +15,7 @@ export function ReviewForm() {
   const [error, setError] = useState<unknown>();
   const [reviews, setReviews] = useState<Review>();
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [rating, setRating] = useState(0);
   const navigate = useNavigate();
 
@@ -54,6 +61,17 @@ export function ReviewForm() {
     } catch (err) {
       console.error(err);
       alert(`Error adding review: ` + String(err));
+    }
+  }
+
+  function handleDelete() {
+    if (!reviews?.reviewId) throw new Error('Should not be possible');
+    try {
+      removeReview(reviews.reviewId);
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      alert(`Error deleting review: ` + String(err));
     }
   }
 
@@ -155,12 +173,43 @@ export function ReviewForm() {
         </div>
         <div className="row">
           <div className="column-full d-flex justify-between">
+            {isEditing && (
+              <button
+                className="delete-review-button"
+                type="button"
+                onClick={() => setIsDeleting(true)}>
+                Delete Review
+              </button>
+            )}
             <button className="input-b-radius text-padding pink-background white-text">
               SAVE
             </button>
           </div>
         </div>
       </form>
+      {isDeleting && (
+        <div
+          id="modalContainer"
+          className="modal-container d-flex justify-center align-center">
+          <div className="modal row">
+            <div className="column-full d-flex justify-center">
+              <p>Are you sure you want to delete this review?</p>
+            </div>
+            <div className="column-full d-flex justify-between">
+              <button
+                className="modal-button"
+                onClick={() => setIsDeleting(false)}>
+                Cancel
+              </button>
+              <button
+                className="modal-button red-background white-text"
+                onClick={handleDelete}>
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
