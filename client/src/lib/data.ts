@@ -7,7 +7,7 @@ export type Review = {
   review: string;
 };
 
-type Book = {
+export type Book = {
   title: string;
   author: string;
   photoUrl: string;
