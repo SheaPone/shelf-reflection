@@ -17,7 +17,9 @@ export function NavBar() {
           <div className="row">
             <div className="column-full d-flex align-center">
               <h1 className="black-text title">Shelf Reflection</h1>
-              <h3 className="navbar-link black-text">Home</h3>
+              <Link to="/homepage" className="navbar-link black-text">
+                <h3>Home</h3>
+              </Link>
               <Link to="/" className="navbar-link black-text">
                 <h3>My Reviews</h3>
               </Link>
