@@ -119,4 +119,15 @@ export async function searchBook(query: string): Promise<Book[]> {
     };
   });
   return books as Book[];
+
+export async function removeReview(reviewId: number) {
+  const token = readToken();
+  const req = {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const res = await fetch(`/api/reviews/${reviewId}`, req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
 }

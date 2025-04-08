@@ -200,6 +200,7 @@ app.put('/api/reviews/:reviewId', authMiddleware, async (req, res, next) => {
   }
 });
 
+
 app.get('/api/books', authMiddleware, async (req, res, next) => {
   const API_KEY = process.env.API_KEY;
   console.log(API_KEY);
@@ -223,6 +224,24 @@ app.get('/api/books', authMiddleware, async (req, res, next) => {
     console.log(data);
   } catch (err) {
     console.error(err);
+
+app.delete('/api/reviews/:reviewId', authMiddleware, async (req, res, next) => {
+  try {
+    const { reviewId } = req.params;
+    if (!Number.isInteger(+reviewId)) {
+      throw new ClientError(400, `Non-integer reviewId: ${reviewId}`);
+    }
+    const deleteReviewSql = `
+    delete from "reviews"
+    where "reviewId" = $1
+    returning *;
+    `;
+    const params = [reviewId];
+    const result = await db.query(deleteReviewSql, params);
+    const [review] = result.rows;
+    if (!review) throw new ClientError(404, `review ${reviewId} not found`);
+    res.status(204).json(review);
+  } catch (err) {
     next(err);
   }
 });
