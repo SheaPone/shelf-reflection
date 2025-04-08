@@ -200,6 +200,31 @@ app.put('/api/reviews/:reviewId', authMiddleware, async (req, res, next) => {
   }
 });
 
+
+app.get('/api/books', authMiddleware, async (req, res, next) => {
+  const API_KEY = process.env.API_KEY;
+  console.log(API_KEY);
+  const query = req.query.q;
+  console.log('query', query);
+  if (!query || typeof query !== 'string') {
+    return res.status(400).json({ error: 'Missing query parameter "q"' });
+  }
+  try {
+    const response = await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+        query
+      )}&maxResults=10&key=${API_KEY}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP Error! Status: ${response.status}`);
+    }
+    console.log(response);
+    const data = await response.json();
+    res.json(data);
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+
 app.delete('/api/reviews/:reviewId', authMiddleware, async (req, res, next) => {
   try {
     const { reviewId } = req.params;

@@ -7,6 +7,13 @@ export type Review = {
   review: string;
 };
 
+export type Book = {
+  title: string;
+  author: string;
+  photoUrl: string;
+  bookId: number;
+};
+
 import { User } from '../components/UserContext';
 
 const authKey = 'um.auth';
@@ -92,6 +99,26 @@ export async function updateReview(review: Review): Promise<Review> {
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);
   return (await res.json()) as Review;
 }
+
+export async function searchBook(query: string): Promise<Book[]> {
+  const token = readToken();
+  const response = await fetch(`/api/books?q=${encodeURIComponent(query)}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  console.log(response.statusText);
+  if (!response.ok) throw new Error(`fetch Error ${response.statusText}`);
+  const data = await response.json();
+  const books = data.items.map((item: any, index: number) => {
+    return {
+      title: item.volumeInfo.title || 'Untitled',
+      author: item.volumeInfo.authors[0] || 'Author Unknown',
+      photoUrl: item.volumeInfo.imageLinks.thumbnail || '/images/blank.png',
+      bookId: index,
+    };
+  });
+  return books as Book[];
 
 export async function removeReview(reviewId: number) {
   const token = readToken();
