@@ -19,6 +19,13 @@
   float: right;
 }
 
+.searchModal {
+  background-color: pink;
+  color: white;
+  float: right;
+  font-size: x-small;
+}
+
 .margin-top {
   margin-top: 6rem;
 }
@@ -56,8 +63,8 @@
   float: left;
 }
 
-.margin-left {
-  margin-left: 0.3rem;
+.book-margin-left {
+  margin-left: 8rem;
 }
 
 .margin-bottom-one {
@@ -100,11 +107,19 @@
 }
 
 .modal {
-  height: 160px;
-  width: 400px;
+  height: 80%;
+  width: 600px;
   background-color: #fff;
   border-radius: 5px;
   font-size: 1.3rem;
+}
+
+.book-modal {
+  height: 90%;
+  width: 800px;
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
 .modal-button {

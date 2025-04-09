@@ -200,12 +200,9 @@ app.put('/api/reviews/:reviewId', authMiddleware, async (req, res, next) => {
   }
 });
 
-
 app.get('/api/books', authMiddleware, async (req, res, next) => {
   const API_KEY = process.env.API_KEY;
-  console.log(API_KEY);
   const query = req.query.q;
-  console.log('query', query);
   if (!query || typeof query !== 'string') {
     return res.status(400).json({ error: 'Missing query parameter "q"' });
   }
@@ -221,9 +218,10 @@ app.get('/api/books', authMiddleware, async (req, res, next) => {
     console.log(response);
     const data = await response.json();
     res.json(data);
-    console.log(data);
   } catch (err) {
     console.error(err);
+  }
+});
 
 app.delete('/api/reviews/:reviewId', authMiddleware, async (req, res, next) => {
   try {
