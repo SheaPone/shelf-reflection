@@ -133,6 +133,51 @@
   color: pink;
 }
 
+.black-background {
+  color: black;
+}
+
+.modal-results {
+  max-height: 85%;
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+
+.book-modal-results {
+  max-height: 100%;
+  overflow-y: auto;
+  margin-top: 1rem;
+}
+
+.book-result {
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.book-image img {
+  width: 80px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.book-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+}
+
+.book-title {
+  font-weight: bold;
+  margin-left: 1rem;
+}
+
+.book-author {
+  margin: 0.25rem 0 0;
+  color: #444;
+}
+
 .white-text {
   color: white;
 }

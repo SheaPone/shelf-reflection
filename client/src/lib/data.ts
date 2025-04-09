@@ -113,8 +113,8 @@ export async function searchBook(query: string): Promise<Book[]> {
   const books = data.items.map((item: any, index: number) => {
     return {
       title: item.volumeInfo.title || 'Untitled',
-      author: item.volumeInfo.authors[0] || 'Author Unknown',
-      photoUrl: item.volumeInfo.imageLinks.thumbnail || '/images/blank.png',
+      author: item.volumeInfo.authors ?? 'Author Unknown',
+      photoUrl: item.volumeInfo.imageLinks?.thumbnail ?? '/images/blank.png',
       bookId: index,
     };
   });
