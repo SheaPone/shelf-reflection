@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { readReviews, Review } from '../lib/data';
-import { FaPencilAlt } from 'react-icons/fa';
+import { readReviews, Review, summaryBook } from '../lib/data';
+import { FaPencilAlt, FaComment } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useUser } from '../components/useUser';
 import { useEffect } from 'react';
@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 export function ReviewList() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchedPhrase, setSearchedPhrase] = useState('');
   const [error, setError] = useState<unknown>();
   const { user } = useUser();
 
@@ -35,22 +36,36 @@ export function ReviewList() {
     );
   }
 
+  const filteredReviews = reviews.filter((review) => {
+    const phrase = searchedPhrase.toLowerCase();
+    return (
+      review.bookTitle.toLowerCase().includes(phrase) ||
+      review.author.toLowerCase().includes(phrase) ||
+      review.review.toLowerCase().includes(phrase)
+    );
+  });
+
   return (
     <div className="container margin-top">
       <div className="row">
         <div className="column-full d-flex justify-between align-center black-text">
           <h1>My Reviews</h1>
-          <h3>
-            <Link to="/details/new" className="white-text form-link">
-              NEW
-            </Link>
-          </h3>
+          <label className="review-search" htmlFor="search">
+            <input
+              type="search"
+              id="search"
+              name="search"
+              placeholder="Search through reviews"
+              value={searchedPhrase}
+              onChange={(e) => setSearchedPhrase(e.target.value)}
+            />
+          </label>
         </div>
       </div>
       <div className="row">
         <div className="column-full">
           <ul className="review-ul">
-            {reviews.map((review) => (
+            {filteredReviews.map((review) => (
               <ReviewCard key={review.reviewId} review={review} />
             ))}
           </ul>
@@ -64,49 +79,100 @@ type ReviewProps = {
 };
 
 function ReviewCard({ review }: ReviewProps) {
+  const [summaryModal, setSummaryModal] = useState(false);
+  const [summary, setSummary] = useState<string | null>(null);
+  const [isLoadingSummary, setIsLoadingSummary] = useState(false);
+  const [summaryError, setSummaryError] = useState<string | null>(null);
+
+  async function openSummary() {
+    setSummaryModal(true);
+    if (!summary) {
+      setIsLoadingSummary(true);
+      await handleSummary();
+    }
+  }
+
+  async function handleSummary() {
+    setSummaryError(null);
+    try {
+      const result = await summaryBook(review.bookTitle);
+      setSummary(result);
+    } catch (error: any) {
+      setSummaryError(error.message || 'Error retrieving summary');
+    } finally {
+      setIsLoadingSummary(false);
+    }
+  }
+
+  function handleCloseSummaryModal() {
+    setSummaryModal(false);
+  }
+
   return (
-    <li>
-      <div className="row">
-        <div className="column-half">
-          <img
-            className="input-b-radius form-image margin-top"
-            src={review.photoUrl}
-            alt=""
-          />
-        </div>
-        <div className="column-half">
-          <div className="row">
-            <div className="column-full d-flex justify-between margin-top black-text">
-              <h3>{review.bookTitle}</h3>
-              <Link className="float-right" to={`details/${review.reviewId}`}>
-                <FaPencilAlt />
-              </Link>
+    <>
+      <li>
+        <div className="row">
+          <div className="column-half">
+            <img
+              className="input-b-radius form-image margin-top"
+              src={review.photoUrl}
+              alt=""
+            />
+          </div>
+          <div className="column-half">
+            <div className="row">
+              <div className="column-full d-flex justify-between margin-top black-text">
+                <h3>{review.bookTitle}</h3>
+                <Link className="float-right" to={`details/${review.reviewId}`}>
+                  <FaPencilAlt />
+                </Link>
+              </div>
+              <div className="column-full d-flex justify-between black-text">
+                <h3>{review.author}</h3>
+                <FaComment className="pink" onClick={openSummary} />
+              </div>
+            </div>
+            <div className="float-left margin-left pink">
+              {[...Array(5)].map((_, index) => {
+                index += 1;
+                return (
+                  <i
+                    key={index}
+                    id={`star-${index}`}
+                    className={
+                      index <= review.rating
+                        ? 'fa-solid fa-star star filled'
+                        : 'fa-regular fa-star star'
+                    }
+                  />
+                );
+              })}
             </div>
             <div className="column-full d-flex justify-between black-text">
-              <h3>{review.author}</h3>
+              <p>{review.review}</p>
             </div>
           </div>
-          <div className="float-left margin-left pink">
-            {[...Array(5)].map((_, index) => {
-              index += 1;
-              return (
-                <i
-                  key={index}
-                  id={`star-${index}`}
-                  className={
-                    index <= review.rating
-                      ? 'fa-solid fa-star star filled'
-                      : 'fa-regular fa-star star'
-                  }
-                />
-              );
-            })}
-          </div>
-          <div className="column-full d-flex justify-between black-text">
-            <p>{review.review}</p>
+        </div>
+      </li>
+      {summaryModal && review.bookTitle && (
+        <div
+          id="modalContainer"
+          className="modal-container d-flex justify-center align-center">
+          <div className="modal column-full">
+            <div className="d-flex justify-between align-center">
+              <p>Book Summary</p>
+              <button className="searchModal" onClick={handleCloseSummaryModal}>
+                X
+              </button>
+            </div>
+            <div className="modal-results">
+              {isLoadingSummary && <p>Loading summary...</p>}
+              {summaryError && <p className="error">{summaryError}</p>}
+              {summary && <p>{summary || 'Loading summary...'}</p>}
+            </div>
           </div>
         </div>
-      </div>
-    </li>
+      )}
+    </>
   );
 }

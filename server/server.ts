@@ -208,7 +208,7 @@ app.get('/api/books', authMiddleware, async (req, res, next) => {
   }
   try {
     const response = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+      `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(
         query
       )}&maxResults=10&key=${API_KEY}`
     );
@@ -240,6 +240,39 @@ app.delete('/api/reviews/:reviewId', authMiddleware, async (req, res, next) => {
     if (!review) throw new ClientError(404, `review ${reviewId} not found`);
     res.status(204).json(review);
   } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/api/summary', authMiddleware, async (req, res, next) => {
+  const AI_API_KEY = process.env.AI_API_KEY;
+  const apiUrl = 'https://api.openai.com/v1/chat/completions';
+  const { title } = req.body;
+  const clientPrompt = `Provide a brief summary of ${title}`;
+  if (!title || typeof title !== 'string') {
+    return res.status(400).json({ error: 'Missing title' });
+  }
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${AI_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: clientPrompt }],
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    const summaryContent = data.choices[0].message.content;
+    res.json({ summary: summaryContent });
+  } catch (err) {
+    console.error('err');
     next(err);
   }
 });

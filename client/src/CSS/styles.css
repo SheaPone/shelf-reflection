@@ -114,6 +114,14 @@
   font-size: 1.3rem;
 }
 
+.summary-modal {
+  height: 40%;
+  width: 600px;
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 1.3rem;
+}
+
 .book-modal {
   height: 90%;
   width: 800px;
@@ -128,4 +136,14 @@
   width: 120px;
   border: none;
   font-size: 1.3rem;
+}
+
+.summary-modal-button {
+  border-radius: 5px;
+  height: 40px;
+  width: 100px;
+  border: none;
+  font-size: 0.75rem;
+  float: right;
+  margin-bottom: 0.25rem;
 }
