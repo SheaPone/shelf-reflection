@@ -137,6 +137,10 @@
   color: black;
 }
 
+.review-search {
+  width: 40%;
+}
+
 .modal-results {
   max-height: 85%;
   overflow-y: auto;

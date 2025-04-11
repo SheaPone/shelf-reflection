@@ -110,12 +110,13 @@ export async function searchBook(query: string): Promise<Book[]> {
   console.log(response.statusText);
   if (!response.ok) throw new Error(`fetch Error ${response.statusText}`);
   const data = await response.json();
-  const books = data.items.map((item: any, index: number) => {
+  console.log(data);
+  const books = data.items.map((item: any) => {
     return {
       title: item.volumeInfo.title || 'Untitled',
       author: item.volumeInfo.authors ?? 'Author Unknown',
       photoUrl: item.volumeInfo.imageLinks?.thumbnail ?? '/images/blank.png',
-      bookId: index,
+      bookId: item.id,
     };
   });
   return books as Book[];
@@ -131,4 +132,20 @@ export async function removeReview(reviewId: number) {
   };
   const res = await fetch(`/api/reviews/${reviewId}`, req);
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+}
+
+export async function summaryBook(bookTitle: string): Promise<string> {
+  const token = readToken();
+  const req = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ title: bookTitle }),
+  };
+  const res = await fetch('/api/summary', req);
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  const data = await res.json();
+  return data.summary;
 }
