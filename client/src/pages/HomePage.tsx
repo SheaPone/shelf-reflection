@@ -16,11 +16,12 @@ export function HomePage() {
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
-    const books = await searchBook(searchQuery);
     setIsLoading(true);
+    const books = await searchBook(searchQuery);
+    setIsLoading(false);
+    if (books.length === 0) return;
     setSearchResults(books);
     setSearchModal(true);
-    setIsLoading(false);
     console.log('books:', books);
   }
 

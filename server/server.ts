@@ -276,6 +276,24 @@ app.post('/api/summary', authMiddleware, async (req, res, next) => {
     next(err);
   }
 });
+
+app.get('/api/feed', async (req, res, next) => {
+  try {
+    const sql = `
+  select * from "reviews"
+  join "users" using ("userId")
+  order by "reviewId" desc;
+  `;
+    const result = await db.query(sql);
+    const total = result.rows;
+    if (!total) {
+      throw new ClientError(404, `reviews not found`);
+    }
+    res.json(total);
+  } catch (err) {
+    next(err);
+  }
+});
 // // Create paths for static directories
 // const reactStaticDir = new URL('../client/dist', import.meta.url).pathname;
 // const uploadsStaticDir = new URL('public', import.meta.url).pathname;
