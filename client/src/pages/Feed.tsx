@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { readReviews, Review } from '../lib/data';
-import { FaPencilAlt } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { readFeed, Review, summaryBook } from '../lib/data';
+import { FaComment } from 'react-icons/fa';
 import { useUser } from '../components/useUser';
 import { useEffect } from 'react';
 
-export function ReviewList() {
+export function Feed() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchedPhrase, setSearchedPhrase] = useState('');
@@ -15,7 +14,7 @@ export function ReviewList() {
   useEffect(() => {
     async function load() {
       try {
-        const reviews = await readReviews();
+        const reviews = await readFeed();
         setReviews(reviews);
       } catch (err) {
         setError(err);
@@ -49,7 +48,7 @@ export function ReviewList() {
     <div className="container margin-top">
       <div className="row">
         <div className="column-full d-flex justify-between align-center black-text">
-          <h1>My Reviews</h1>
+          <h1 className="margin-bottom-2">Feed</h1>
           <label className="review-search" htmlFor="search">
             <input
               type="search"
@@ -74,29 +73,58 @@ export function ReviewList() {
     </div>
   );
 }
+
 type ReviewProps = {
   review: Review;
 };
 
 function ReviewCard({ review }: ReviewProps) {
+  const [summaryModal, setSummaryModal] = useState(false);
+  const [summary, setSummary] = useState<string | null>(null);
+  const [isLoadingSummary, setIsLoadingSummary] = useState(false);
+  const [summaryError, setSummaryError] = useState<string | null>(null);
+
+  async function openSummary() {
+    setSummaryModal(true);
+    if (!summary) {
+      setIsLoadingSummary(true);
+      await handleSummary();
+    }
+  }
+
+  async function handleSummary() {
+    setSummaryError(null);
+    try {
+      const result = await summaryBook(review.bookTitle);
+      setSummary(result);
+    } catch (error: any) {
+      setSummaryError(error.message || 'Error retrieving summary');
+    } finally {
+      setIsLoadingSummary(false);
+    }
+  }
+
+  function handleCloseSummaryModal() {
+    setSummaryModal(false);
+  }
+
   return (
     <>
       <li>
-        <div className="row">
+        <div className="row margin-bottom-3">
           <div className="column-half">
+            <p className="float-left margin-bottom-1 bold">{review.username}</p>
             <img
-              className="input-b-radius form-image margin-top"
+              className="input-b-radius form-image "
               src={review.photoUrl}
               alt=""
             />
           </div>
           <div className="column-half">
-            <div className="row">
+            <div className="row ">
               <div className="column-full d-flex justify-between margin-top black-text">
                 <h3>{review.bookTitle}</h3>
-                <Link className="float-right" to={`details/${review.reviewId}`}>
-                  <FaPencilAlt />
-                </Link>
+                <FaComment className="pink" onClick={openSummary} />
               </div>
               <div className="column-full d-flex justify-between black-text">
                 <h3>{review.author}</h3>
@@ -124,6 +152,25 @@ function ReviewCard({ review }: ReviewProps) {
           </div>
         </div>
       </li>
+      {summaryModal && review.bookTitle && (
+        <div
+          id="modalContainer"
+          className="modal-container d-flex justify-center align-center">
+          <div className="modal column-full">
+            <div className="d-flex justify-between align-center">
+              <p>Book Summary</p>
+              <button className="searchModal" onClick={handleCloseSummaryModal}>
+                X
+              </button>
+            </div>
+            <div className="modal-results">
+              {isLoadingSummary && <p>Loading summary...</p>}
+              {summaryError && <p className="error">{summaryError}</p>}
+              {summary && <p>{summary || 'Loading summary...'}</p>}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

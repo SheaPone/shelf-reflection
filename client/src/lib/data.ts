@@ -5,6 +5,8 @@ export type Review = {
   photoUrl: string;
   rating: number;
   review: string;
+  userId?: number;
+  username?: string;
 };
 
 export type Book = {
@@ -111,6 +113,10 @@ export async function searchBook(query: string): Promise<Book[]> {
   if (!response.ok) throw new Error(`fetch Error ${response.statusText}`);
   const data = await response.json();
   console.log(data);
+  if (data.totalItems === 0) {
+    alert('Book does not exist');
+    return [];
+  }
   const books = data.items.map((item: any) => {
     return {
       title: item.volumeInfo.title || 'Untitled',
@@ -148,4 +154,10 @@ export async function summaryBook(bookTitle: string): Promise<string> {
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);
   const data = await res.json();
   return data.summary;
+}
+
+export async function readFeed(): Promise<Review[]> {
+  const res = await fetch('/api/feed');
+  if (!res.ok) throw new Error(`fetch Error ${res.status}`);
+  return (await res.json()) as Review[];
 }
