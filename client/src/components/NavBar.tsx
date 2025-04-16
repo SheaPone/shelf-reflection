@@ -26,7 +26,9 @@ export function NavBar() {
               <Link to="/feed" className="navbar-link black-text">
                 <h3>Feed</h3>
               </Link>
-              <h3 className="navbar-link black-text">Shop</h3>
+              <Link to="/shop" className="navbar-link black-text">
+                <h3>Shop</h3>
+              </Link>
               <FaShoppingCart color="black" size="20" className="inline" />
               <span className="absolute top-2 right-80 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full"></span>
               {user ? (
