@@ -147,6 +147,11 @@
   font-size: 1rem;
 }
 
+.cart-image {
+  display: block;
+  margin: auto;
+}
+
 .homeSearch {
   display: flex;
   justify-content: center;

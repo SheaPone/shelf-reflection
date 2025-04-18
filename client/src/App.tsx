@@ -9,6 +9,7 @@ import { ReviewList } from './pages/ReviewList';
 import { HomePage } from './pages/HomePage';
 import { Feed } from './pages/Feed';
 import { Shop } from './pages/Shop';
+import { Cart } from './pages/Cart';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="details/:reviewId" element={<ReviewForm />} />
           <Route path="/feed" element={<Feed />} />
           <Route path="/shop" element={<Shop />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
