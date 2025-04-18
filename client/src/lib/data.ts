@@ -9,6 +9,8 @@ export type Review = {
   username?: string;
 };
 
+import { BookProps } from '../pages/Catalog';
+
 export type Book = {
   title: string;
   author: string;
@@ -160,4 +162,31 @@ export async function readFeed(): Promise<Review[]> {
   const res = await fetch('/api/feed');
   if (!res.ok) throw new Error(`fetch Error ${res.status}`);
   return (await res.json()) as Review[];
+}
+
+export async function searchBookShop(search: string): Promise<BookProps[]> {
+  const token = readToken();
+  const response = await fetch(`/api/books?q=${encodeURIComponent(search)}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  console.log(response.statusText);
+  if (!response.ok) throw new Error(`fetch Error ${response.statusText}`);
+  const data = await response.json();
+  console.log(data);
+  if (data.totalItems === 0) {
+    alert('Book does not exist');
+    return [];
+  }
+  const books = data.items.map((item: any) => {
+    return {
+      bookId: item.id,
+      title: item.volumeInfo.title || 'Untitled',
+      author: item.volumeInfo.authors ?? 'Author Unknown',
+      imageUrl: item.volumeInfo.imageLinks?.thumbnail ?? '/images/blank.png',
+      bookSummary: item.volumeInfo.description ?? 'Description Unknown',
+    };
+  });
+  return books as BookProps[];
 }

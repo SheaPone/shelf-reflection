@@ -1,10 +1,12 @@
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { useUser } from './useUser';
+import { useCart } from './useCart';
 
 export function NavBar() {
   const { user, handleSignOut } = useUser();
   const navigate = useNavigate();
+  const { cart } = useCart();
   function handleClick(): void {
     handleSignOut();
     navigate('/');
@@ -26,9 +28,15 @@ export function NavBar() {
               <Link to="/feed" className="navbar-link black-text">
                 <h3>Feed</h3>
               </Link>
-              <h3 className="navbar-link black-text">Shop</h3>
+              <Link to="/shop" className="navbar-link black-text">
+                <h3>Shop</h3>
+              </Link>
               <FaShoppingCart color="black" size="20" className="inline" />
-              <span className="absolute top-2 right-80 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full"></span>
+              {cart.length > 0 && (
+                <span className="absolute top-2 right-80 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                  {cart.length}
+                </span>
+              )}
               {user ? (
                 <button
                   onClick={handleClick}

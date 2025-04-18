@@ -78,6 +78,38 @@
   margin-bottom: 3rem;
 }
 
+.image-card {
+  width: 200px;
+}
+
+.carousel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5rem;
+}
+
+.carousel-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.arrow {
+  cursor: pointer;
+  color: #555;
+}
+
+.dots-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
 .margin-top-6 {
   margin-top: 6rem;
 }
