@@ -32,7 +32,7 @@ export function Catalog() {
     if (!book) throw new Error('Should never happen');
     addToCart(book);
     alert(`Added ${book?.title} to cart`);
-    navigate('/'); //will need to change to cart's path
+    navigate('/cart');
   }
 
   if (isLoading) {
@@ -59,10 +59,12 @@ export function Catalog() {
       </div>
       {searchResults && (
         <div className="search-results">
-          {searchResults.map((book) => (
-            <div className="block cursor-pointer text-gray-900 rounded border border-gray-300 mb-4">
+          {searchResults.map((book, index) => (
+            <div
+              key={index}
+              className="block cursor-pointer text-gray-900 rounded border border-gray-300 mb-4">
               <div className="flex-auto p-6">
-                <img src={book.imageUrl}></img>
+                <img className="cart-image" src={book.imageUrl}></img>
                 <h5 className="font-bold mb-3">{book.title}</h5>
                 <h5 className="font-bold mb-3">{book.author}</h5>
                 <h6>$20</h6>

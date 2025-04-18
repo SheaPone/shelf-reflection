@@ -31,12 +31,14 @@ export function NavBar() {
               <Link to="/shop" className="navbar-link black-text">
                 <h3>Shop</h3>
               </Link>
-              <FaShoppingCart color="black" size="20" className="inline" />
-              {cart.length > 0 && (
-                <span className="absolute top-2 right-80 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                  {cart.length}
-                </span>
-              )}
+              <Link to="/cart" className="navbar-link">
+                <FaShoppingCart color="black" size="20" className="inline" />
+                {cart.length > 0 && (
+                  <span className="absolute top-2 right-80 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                    {cart.length}
+                  </span>
+                )}
+              </Link>
               {user ? (
                 <button
                   onClick={handleClick}
