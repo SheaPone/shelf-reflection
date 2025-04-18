@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { searchBookShop } from '../lib/data';
+import { useCart } from '../components/useCart';
+import { useNavigate } from 'react-router-dom';
 
 export type BookProps = {
   bookId: number;
@@ -13,6 +15,8 @@ export function Catalog() {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<BookProps[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -22,6 +26,13 @@ export function Catalog() {
     if (books.length === 0) return;
     setSearchResults(books);
     console.log('books:', books);
+  }
+
+  function handleAddToCart(book: BookProps) {
+    if (!book) throw new Error('Should never happen');
+    addToCart(book);
+    alert(`Added ${book?.title} to cart`);
+    navigate('/'); //will need to change to cart's path
   }
 
   if (isLoading) {
@@ -56,6 +67,9 @@ export function Catalog() {
                 <h5 className="font-bold mb-3">{book.author}</h5>
                 <h6>$20</h6>
                 <h6>{book.bookSummary}</h6>
+                <button onClick={() => handleAddToCart(book)}>
+                  Add to Cart
+                </button>
               </div>
             </div>
           ))}
