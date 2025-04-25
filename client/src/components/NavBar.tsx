@@ -22,19 +22,19 @@ export function NavBar() {
               <Link to="/homepage" className="navbar-link black-text">
                 <h3>Home</h3>
               </Link>
-              <Link to="/" className="navbar-link black-text">
+              <Link to="/myreviews" className="navbar-link black-text">
                 <h3>My Reviews</h3>
               </Link>
               <Link to="/feed" className="navbar-link black-text">
                 <h3>Feed</h3>
               </Link>
-              <Link to="/shop" className="navbar-link black-text">
+              <Link to="/" className="navbar-link black-text">
                 <h3>Shop</h3>
               </Link>
-              <Link to="/cart" className="navbar-link">
+              <Link to="/cart" className="navbar-link relative inline-block">
                 <FaShoppingCart color="black" size="20" className="inline" />
                 {cart.length > 0 && (
-                  <span className="absolute top-2 right-80 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                  <span className="absolute -top-3 -right-4 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
                     {cart.length}
                   </span>
                 )}

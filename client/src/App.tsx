@@ -10,6 +10,8 @@ import { HomePage } from './pages/HomePage';
 import { Feed } from './pages/Feed';
 import { Shop } from './pages/Shop';
 import { Cart } from './pages/Cart';
+import { Cancel } from './pages/Cancel';
+import { Success } from './pages/Success';
 
 export default function App() {
   return (
@@ -18,13 +20,15 @@ export default function App() {
         <Route path="/" element={<NavBar />}>
           <Route path="/auth/sign-up" element={<AuthPage mode="sign-up" />} />
           <Route path="/auth/sign-in" element={<AuthPage mode="sign-in" />} />
-          <Route index element={<ReviewList />} />
+          <Route path="/myreviews" element={<ReviewList />} />
           <Route path="/homepage" element={<HomePage />} />
-          <Route path="details/:reviewId" element={<ReviewForm />} />
+          <Route path="/details/:reviewId" element={<ReviewForm />} />
           <Route path="/feed" element={<Feed />} />
-          <Route path="/shop" element={<Shop />} />
+          <Route index element={<Shop />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/cancel" element={<Cancel />} />
+          <Route path="/success" element={<Success />} />
         </Route>
       </Routes>
     </UserProvider>

@@ -45,7 +45,7 @@ export function Feed() {
   });
 
   return (
-    <div className="container margin-top">
+    <div className="container margin-top-2">
       <div className="row">
         <div className="column-full d-flex justify-between align-center black-text">
           <h1 className="margin-bottom-2">Feed</h1>
@@ -63,11 +63,15 @@ export function Feed() {
       </div>
       <div className="row">
         <div className="column-full">
-          <ul className="review-ul">
-            {filteredReviews.map((review) => (
-              <ReviewCard key={review.reviewId} review={review} />
-            ))}
-          </ul>
+          {reviews.length === 0 ? (
+            <p className="no-reviews">No posts yet! :(</p>
+          ) : (
+            <ul className="review-ul">
+              {filteredReviews.map((review) => (
+                <ReviewCard key={review.reviewId} review={review} />
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>
@@ -111,9 +115,11 @@ function ReviewCard({ review }: ReviewProps) {
   return (
     <>
       <li>
+        <p className="float-left margin-bottom-2 bold">
+          {review.username?.toUpperCase()}
+        </p>
         <div className="row margin-bottom-3">
           <div className="column-half">
-            <p className="float-left margin-bottom-1 bold">{review.username}</p>
             <img
               className="input-b-radius form-image "
               src={review.photoUrl}

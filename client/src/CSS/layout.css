@@ -13,7 +13,7 @@
 .container {
   max-width: 575px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 0.75rem;
 }
 
 .row {
@@ -114,6 +114,10 @@
   margin-top: 6rem;
 }
 
+.margin-top-2 {
+  margin-top: 2rem;
+}
+
 .text-center {
   text-align: center;
 }
@@ -150,6 +154,7 @@
 .cart-image {
   display: block;
   margin: auto;
+  margin-bottom: 1rem;
 }
 
 .homeSearch {
@@ -166,7 +171,7 @@
 }
 
 .background {
-  background-image: url('../images/download.png');
+  background-image: url('/../images/download.png');
   height: 5rem;
   position: fixed;
   width: 100%;
@@ -242,6 +247,14 @@ h2 {
   text-align: center;
   width: 20%;
   align-items: center;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.relative {
+  position: relative;
 }
 
 .black-text {

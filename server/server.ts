@@ -5,6 +5,7 @@ import pg from 'pg';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import { authMiddleware, ClientError, errorMiddleware } from './lib/index.js';
+import Stripe from 'stripe';
 
 type Review = {
   reviewId?: number;
@@ -33,6 +34,10 @@ if (!hashKey) throw new Error('TOKEN_SECRET not found in .env');
 const app = express();
 
 app.use(express.json());
+
+const stripeAPIKey = process.env.STRIPE_API_KEY;
+if (!stripeAPIKey) throw new Error('Stripe API key does not exist');
+const stripe = new Stripe(stripeAPIKey);
 
 app.post('/api/auth/sign-up', async (req, res, next) => {
   try {
@@ -293,6 +298,29 @@ app.get('/api/feed', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+app.post('/api/create-checkout-session', async (req, res, next) => {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Cart Total',
+          },
+          unit_amount: 2000,
+        },
+        quantity: 2,
+      },
+    ],
+    mode: 'payment',
+    success_url: `http://127.0.0.1:5173/success`,
+    cancel_url: `http://127.0.0.1:5173/cancel`,
+  });
+  if (!session.url) throw new Error('session url does not exist');
+  res.redirect(303, session.url);
 });
 // // Create paths for static directories
 // const reactStaticDir = new URL('../client/dist', import.meta.url).pathname;
