@@ -57,7 +57,7 @@ export function ReviewForm() {
       } else {
         addReview(newReview);
       }
-      navigate('/');
+      navigate('/myreviews');
     } catch (err) {
       console.error(err);
       alert(`Error adding review: ` + String(err));
@@ -68,7 +68,7 @@ export function ReviewForm() {
     if (!reviews?.reviewId) throw new Error('Should not be possible');
     try {
       removeReview(reviews.reviewId);
-      navigate('/');
+      navigate('/myreviews');
     } catch (err) {
       console.error(err);
       alert(`Error deleting review: ` + String(err));
@@ -191,18 +191,18 @@ export function ReviewForm() {
         <div
           id="modalContainer"
           className="modal-container d-flex justify-center align-center">
-          <div className="modal row">
-            <div className="column-full d-flex justify-center">
+          <div className="delete-modal row">
+            <div className="delete-review-title column-full d-flex justify-center">
               <p>Are you sure you want to delete this review?</p>
             </div>
             <div className="column-full d-flex justify-between">
               <button
-                className="modal-button"
+                className="cancel modal-button"
                 onClick={() => setIsDeleting(false)}>
                 Cancel
               </button>
               <button
-                className="modal-button red-background white-text"
+                className=" confirm modal-button red-background white-text"
                 onClick={handleDelete}>
                 Confirm
               </button>

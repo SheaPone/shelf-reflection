@@ -47,7 +47,7 @@ export function HomePage() {
       };
       addReview(newReview);
       closeModal();
-      navigate('/');
+      navigate('/myreviews');
     } catch (err) {
       console.error(err);
       alert(`Error adding review: ` + String(err));

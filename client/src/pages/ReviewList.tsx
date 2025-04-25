@@ -46,11 +46,11 @@ export function ReviewList() {
   });
 
   return (
-    <div className="container margin-top">
+    <div className="container">
       <div className="row">
         <div className="column-full d-flex justify-between align-center black-text">
           <h1>My Reviews</h1>
-          <label className="review-search" htmlFor="search">
+          <label className="review-search margin-top-2" htmlFor="search">
             <input
               type="search"
               id="search"
@@ -64,11 +64,15 @@ export function ReviewList() {
       </div>
       <div className="row">
         <div className="column-full">
-          <ul className="review-ul">
-            {filteredReviews.map((review) => (
-              <ReviewCard key={review.reviewId} review={review} />
-            ))}
-          </ul>
+          {reviews.length === 0 ? (
+            <p className="no-reviews">No Reviews yet! :(</p>
+          ) : (
+            <ul className="review-ul">
+              {filteredReviews.map((review) => (
+                <ReviewCard key={review.reviewId} review={review} />
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>
@@ -94,7 +98,9 @@ function ReviewCard({ review }: ReviewProps) {
             <div className="row">
               <div className="column-full d-flex justify-between margin-top black-text">
                 <h3>{review.bookTitle}</h3>
-                <Link className="float-right" to={`details/${review.reviewId}`}>
+                <Link
+                  className="float-right"
+                  to={`/details/${review.reviewId}`}>
                   <FaPencilAlt />
                 </Link>
               </div>

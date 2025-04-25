@@ -8,7 +8,7 @@ export function Cart() {
   }
   return (
     <>
-      <h1>Your Cart</h1>
+      <h1 className="margin-bottom-1">Your Cart</h1>
       <ul>
         {cart.map((book: BookProps, index: number) => (
           <li key={index}>
@@ -19,8 +19,10 @@ export function Cart() {
           </li>
         ))}
       </ul>
-      <p>Total ${cart.length * 20}</p>
-      <button>Checkout</button>
+      <p className="margin-bottom-1 bold">Total ${cart.length * 20}</p>
+      <form action="/api/create-checkout-session" method="POST">
+        <button type="submit">Checkout</button>
+      </form>
     </>
   );
 }

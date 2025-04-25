@@ -1,7 +1,3 @@
-.header {
-  background-color: #562b81;
-}
-
 .form-image {
   max-height: 15rem;
   margin-bottom: 1rem;
@@ -116,6 +112,26 @@
   font-size: 1.3rem;
 }
 
+.delete-modal {
+  height: 25%;
+  width: 500px;
+  background-color: #fff;
+  border-radius: 5px;
+  font-size: 1.3rem;
+}
+
+.confirm {
+  margin-right: 2rem;
+}
+
+.cancel {
+  margin-left: 2rem;
+}
+
+.delete-review-title {
+  margin-top: 2rem;
+}
+
 .summary-modal {
   height: 40%;
   width: 600px;
@@ -138,6 +154,11 @@
   width: 120px;
   border: none;
   font-size: 1.3rem;
+}
+
+.no-reviews {
+  margin-top: 2rem;
+  font-weight: bold;
 }
 
 .summary-modal-button {
