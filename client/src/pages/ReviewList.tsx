@@ -46,9 +46,9 @@ export function ReviewList() {
   });
 
   return (
-    <div className="container">
+    <div className="container margin-auto">
       <div className="row">
-        <div className="column-full d-flex justify-between align-center black-text">
+        <div className="column-full d-flex justify-between align-center black-text margin-top-2">
           <h1>My Reviews</h1>
           <label className="review-search margin-top-2" htmlFor="search">
             <input

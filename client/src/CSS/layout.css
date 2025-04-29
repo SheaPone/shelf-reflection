@@ -12,8 +12,11 @@
 
 .container {
   max-width: 575px;
-  margin: 0 auto;
   padding: 0 0.75rem;
+}
+
+.margin-auto {
+  margin: auto;
 }
 
 .row {
@@ -86,7 +89,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 5rem;
+  margin-top: 2rem;
 }
 
 .carousel-content {
@@ -114,8 +117,24 @@
   margin-top: 6rem;
 }
 
+.underline {
+  text-decoration: underline;
+}
+
+.margin-bottom-6 {
+  margin-bottom: 6rem;
+}
+
 .margin-top-2 {
   margin-top: 2rem;
+}
+
+.margin-top-4 {
+  margin-top: 4rem;
+}
+
+.margin-bottom-4 {
+  margin-bottom: 4rem;
 }
 
 .text-center {
@@ -173,10 +192,7 @@
 .background {
   background-image: url('/../images/download.png');
   height: 5rem;
-  position: fixed;
   width: 100%;
-  top: 0;
-  left: 0;
 }
 
 .pink-background {
@@ -227,6 +243,10 @@
   margin-left: 1rem;
 }
 
+.margin-left-5 {
+  margin-left: 5rem;
+}
+
 .book-author {
   margin: 0.25rem 0 0;
   color: #444;
@@ -245,7 +265,6 @@ h2 {
   display: inline-block;
   margin-top: 1rem;
   text-align: center;
-  width: 20%;
   align-items: center;
 }
 
@@ -281,5 +300,9 @@ h2 {
 
   .column-half {
     width: 50%;
+  }
+
+  .margin-left-1 {
+    margin-left: 1rem;
   }
 }

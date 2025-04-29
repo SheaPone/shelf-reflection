@@ -43,10 +43,10 @@ export function SignInForm() {
   }
 
   return (
-    <div className="p-3 container">
+    <div className="p-3 container margin-left-5">
       <h2 className="text-xl font-bold mb-4">Sign In</h2>
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-wrap mb-1">
+        <div className="flex flex-wrap mb-1 justify-content-center">
           <div className="mb-4">
             <label className="mb-1 block">
               Username

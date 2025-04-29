@@ -38,6 +38,7 @@ export function Feed() {
   const filteredReviews = reviews.filter((review) => {
     const phrase = searchedPhrase.toLowerCase();
     return (
+      review.username?.toLowerCase().includes(phrase) ||
       review.bookTitle.toLowerCase().includes(phrase) ||
       review.author.toLowerCase().includes(phrase) ||
       review.review.toLowerCase().includes(phrase)
@@ -45,10 +46,10 @@ export function Feed() {
   });
 
   return (
-    <div className="container margin-top-2">
+    <div className="container margin-top-2 margin-auto">
       <div className="row">
-        <div className="column-full d-flex justify-between align-center black-text">
-          <h1 className="margin-bottom-2">Feed!</h1>
+        <div className="column-full d-flex justify-between align-center black-text margin-bottom-4">
+          <h1 className="">Feed</h1>
           <label className="review-search" htmlFor="search">
             <input
               type="search"
@@ -115,10 +116,10 @@ function ReviewCard({ review }: ReviewProps) {
   return (
     <>
       <li>
-        <p className="float-left margin-bottom-2 bold">
-          {review.username?.toUpperCase()}
+        <p className="float-left margin-bottom-2 bold underline">
+          Posted by: {review.username?.toUpperCase()}
         </p>
-        <div className="row margin-bottom-3">
+        <div className="row margin-bottom-6">
           <div className="column-half">
             <img
               className="input-b-radius form-image "
@@ -136,7 +137,7 @@ function ReviewCard({ review }: ReviewProps) {
                 <h3>{review.author}</h3>
               </div>
             </div>
-            <div className="float-left margin-left pink">
+            <div className="float-left margin-left-1 pink">
               {[...Array(5)].map((_, index) => {
                 index += 1;
                 return (

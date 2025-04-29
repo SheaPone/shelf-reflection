@@ -6,6 +6,7 @@ import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import { authMiddleware, ClientError, errorMiddleware } from './lib/index.js';
 import Stripe from 'stripe';
+import { CallTracker } from 'assert';
 
 type Review = {
   reviewId?: number;
@@ -301,26 +302,33 @@ app.get('/api/feed', async (req, res, next) => {
 });
 
 app.post('/api/create-checkout-session', async (req, res, next) => {
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    line_items: [
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: 'Cart Total',
+  const { cart } = req.body;
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Cart Total',
+            },
+            unit_amount: 2000,
           },
-          unit_amount: 2000,
+          quantity: cart.length,
         },
-        quantity: 2,
-      },
-    ],
-    mode: 'payment',
-    success_url: `http://127.0.0.1:5173/success`,
-    cancel_url: `http://127.0.0.1:5173/cancel`,
-  });
-  if (!session.url) throw new Error('session url does not exist');
-  res.redirect(303, session.url);
+      ],
+      mode: 'payment',
+      success_url: `http://127.0.0.1:5173/success`,
+      cancel_url: `http://127.0.0.1:5173/cancel`,
+    });
+    if (!session.url) throw new Error('session url does not exist');
+    // res.redirect(303, session.url);
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error('error stripe:', error);
+    next(error);
+  }
 });
 // // Create paths for static directories
 // const reactStaticDir = new URL('../client/dist', import.meta.url).pathname;
