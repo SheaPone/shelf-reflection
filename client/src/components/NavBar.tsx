@@ -15,9 +15,9 @@ export function NavBar() {
   return (
     <>
       <header className="background">
-        <div className=" container">
+        <div className="container">
           <div className="row">
-            <div className="column-full d-flex align-center">
+            <div className="column-full d-flex align-center justify-content">
               <h1 className="black-text title">Shelf Reflection</h1>
               <Link to="/homepage" className="navbar-link black-text">
                 <h3>Home</h3>

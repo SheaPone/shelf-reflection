@@ -9,6 +9,14 @@
   display: block;
 }
 
+.justify-content {
+  justify-content: space-evenly;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
 .input-height {
   height: 2.5rem;
 }

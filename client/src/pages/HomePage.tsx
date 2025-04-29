@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Review, addReview } from '../lib/data';
 import { Book } from '../lib/data';
 import { searchBook } from '../lib/data';
+import { useUser } from '../components/useUser';
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Book[] | null>(null);
@@ -13,6 +14,7 @@ export function HomePage() {
   const [rating, setRating] = useState(0);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const navigate = useNavigate();
+  const { user } = useUser();
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -65,7 +67,7 @@ export function HomePage() {
   function handleCancel() {
     setFormModal(false);
   }
-
+  if (!user) return <div>Login to continue</div>;
   if (isLoading) return <div>Loading...</div>;
   return (
     <>
