@@ -129,7 +129,7 @@ function ReviewCard({ review }: ReviewProps) {
           </div>
           <div className="column-half">
             <div className="row ">
-              <div className="column-full d-flex justify-between margin-top black-text">
+              <div className="column-full d-flex justify-between black-text">
                 <h3>{review.bookTitle}</h3>
                 <FaComment className="pink" onClick={openSummary} />
               </div>

@@ -221,7 +221,6 @@ app.get('/api/books', authMiddleware, async (req, res, next) => {
     if (!response.ok) {
       throw new Error(`HTTP Error! Status: ${response.status}`);
     }
-    console.log(response);
     const data = await response.json();
     res.json(data);
   } catch (err) {

@@ -108,7 +108,7 @@ function ReviewCard({ review }: ReviewProps) {
                 <h3>{review.author}</h3>
               </div>
             </div>
-            <div className="float-left margin-left pink">
+            <div className="float-left margin-left-1 pink">
               {[...Array(5)].map((_, index) => {
                 index += 1;
                 return (

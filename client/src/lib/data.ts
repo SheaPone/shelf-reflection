@@ -111,10 +111,8 @@ export async function searchBook(query: string): Promise<Book[]> {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(response.statusText);
   if (!response.ok) throw new Error(`fetch Error ${response.statusText}`);
   const data = await response.json();
-  console.log(data);
   if (data.totalItems === 0) {
     alert('Book does not exist');
     return [];
@@ -171,10 +169,8 @@ export async function searchBookShop(search: string): Promise<BookProps[]> {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(response.statusText);
   if (!response.ok) throw new Error(`fetch Error ${response.statusText}`);
   const data = await response.json();
-  console.log(data);
   if (data.totalItems === 0) {
     alert('Book does not exist');
     return [];

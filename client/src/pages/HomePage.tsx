@@ -24,7 +24,6 @@ export function HomePage() {
     if (books.length === 0) return;
     setSearchResults(books);
     setSearchModal(true);
-    console.log('books:', books);
   }
 
   function closeModal() {
@@ -113,6 +112,7 @@ export function HomePage() {
                     <img
                       src={book.photoUrl}
                       alt={book.title}
+                      className="cursor-pointer"
                       onClick={() => handleNewForm(book)}
                     />
                   </div>
