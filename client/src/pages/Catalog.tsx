@@ -25,7 +25,6 @@ export function Catalog() {
     setIsLoading(false);
     if (books.length === 0) return;
     setSearchResults(books);
-    console.log('books:', books);
   }
 
   function handleAddToCart(book: BookProps) {

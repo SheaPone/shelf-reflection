@@ -164,6 +164,10 @@
   font-size: 1.3rem;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .no-reviews {
   margin-top: 2rem;
   font-weight: bold;

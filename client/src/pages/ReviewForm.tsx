@@ -86,9 +86,9 @@ export function ReviewForm() {
   }
 
   return (
-    <div className="container">
+    <div className="container margin-auto">
       <div className="row">
-        <div className="column-half d-flex justify-between margin-top">
+        <div className="column-half d-flex justify-between margin-top-2">
           <h2>{isEditing ? 'Edit Review' : 'New Review'}</h2>
         </div>
       </div>

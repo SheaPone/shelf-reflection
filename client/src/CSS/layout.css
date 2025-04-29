@@ -288,6 +288,10 @@ h2 {
   background-color: #f0f0f0;
 }
 
+.title {
+  font-size: 2rem;
+}
+
 @media screen and (width >= 768px) {
   .container {
     max-width: 900px;
@@ -296,6 +300,10 @@ h2 {
   .column-full,
   .column-half {
     padding: 0 0.75rem;
+  }
+
+  .title {
+    font-size: 3rem;
   }
 
   .column-half {
