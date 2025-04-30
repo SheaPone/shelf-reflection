@@ -6,7 +6,6 @@ import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import { authMiddleware, ClientError, errorMiddleware } from './lib/index.js';
 import Stripe from 'stripe';
-import { CallTracker } from 'assert';
 
 type Review = {
   reviewId?: number;
@@ -330,19 +329,14 @@ app.post('/api/create-checkout-session', async (req, res, next) => {
   }
 });
 // // Create paths for static directories
-// const reactStaticDir = new URL('../client/dist', import.meta.url).pathname;
-// const uploadsStaticDir = new URL('public', import.meta.url).pathname;
+const reactStaticDir = new URL('../client/dist', import.meta.url).pathname;
+const uploadsStaticDir = new URL('public', import.meta.url).pathname;
 
-// app.use(express.static(reactStaticDir));
+app.use(express.static(reactStaticDir));
 // // Static directory for file uploads server/public/
-// app.use(express.static(uploadsStaticDir));
+app.use(express.static(uploadsStaticDir));
 
-/*
- * Handles paths that aren't handled by any other route handler.
- * It responds with `index.html` to support page refreshes with React Router.
- * This must be the _last_ route, just before errorMiddleware.
- */
-// app.get('*', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
+app.get('*', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
 
 app.use(errorMiddleware);
 
