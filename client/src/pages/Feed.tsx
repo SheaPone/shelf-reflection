@@ -49,7 +49,7 @@ export function Feed() {
     <div className="container margin-top-2 margin-auto">
       <div className="row">
         <div className="column-full d-flex justify-between align-center black-text margin-bottom-4">
-          <h1 className="">Feed</h1>
+          <h1>Feed</h1>
           <label className="review-search" htmlFor="search">
             <input
               type="search"
