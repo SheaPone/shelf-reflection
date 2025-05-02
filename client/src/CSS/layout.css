@@ -289,7 +289,7 @@ h2 {
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 2rem !important;
 }
 
 @media screen and (width >= 768px) {

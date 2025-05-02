@@ -301,6 +301,10 @@ app.get('/api/feed', async (req, res, next) => {
 
 app.post('/api/create-checkout-session', async (req, res, next) => {
   const { cart } = req.body;
+  const FRONTEND_BASE_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'http://ec2-52-9-87-61.us-west-1.compute.amazonaws.com'
+      : 'http://localhost:5173';
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -317,8 +321,8 @@ app.post('/api/create-checkout-session', async (req, res, next) => {
         },
       ],
       mode: 'payment',
-      success_url: `http://127.0.0.1:5173/success`,
-      cancel_url: `http://127.0.0.1:5173/cancel`,
+      success_url: `${FRONTEND_BASE_URL}/success`,
+      cancel_url: `${FRONTEND_BASE_URL}/cancel`,
     });
     if (!session.url) throw new Error('session url does not exist');
     // res.redirect(303, session.url);
