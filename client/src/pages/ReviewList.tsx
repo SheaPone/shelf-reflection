@@ -99,7 +99,7 @@ function ReviewCard({ review }: ReviewProps) {
               <div className="column-full d-flex justify-between margin-top black-text">
                 <h3>{review.bookTitle}</h3>
                 <Link
-                  className="float-right"
+                  className="float-right pencil"
                   to={`/details/${review.reviewId}`}>
                   <FaPencilAlt />
                 </Link>
