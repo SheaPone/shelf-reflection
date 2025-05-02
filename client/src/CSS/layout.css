@@ -303,7 +303,7 @@ h2 {
   }
 
   .title {
-    font-size: 3rem;
+    font-size: 3rem !important;
   }
 
   .column-half {
